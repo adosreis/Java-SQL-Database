@@ -79,8 +79,11 @@ public class SQLDatabase {
         ArrayList<TreeMap<String,String>> preTable2 = new ArrayList<TreeMap<String, String>>();
         preTable2.add(preTable1);
         JSQL.createTable("Schools", preTable2);
+        System.out.println("Schools");
         JSQL.printTable(preTable2);
-        System.out.println("Preparing to receive input, exit Token is \"*\"");
+        System.out.println("Preparing to receive input...");
+        System.out.println("Exit Token is \"exit\"");
+        System.out.println("Spaces in values should be written as \'_\'");
         while(true){
             Query inputs = Query.readQuery("exit", true);
             if (inputs == null) {
