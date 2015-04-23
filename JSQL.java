@@ -97,6 +97,7 @@ public class JSQL {
     public static void main(String[] args) {
 
     }
+    public static Set<String> getTables(){return table.keySet();}
 
     public static void createTable(String tableName, ArrayList<TreeMap<String, String>> table) {
         JSQL.table.put(tableName, table);

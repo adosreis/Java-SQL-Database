@@ -44,6 +44,7 @@ public class SQLDatabase {
     //this seems pretty tasty, hoping the TreeMaps sort the same each time
     public static boolean insert(Query insertQuery, String waste) { //this assumes that the person imputing values knows the order in which to order the inputed information
         if(insertQuery.isInsert()){
+            if(JSQL.getTables().contains(insertQuery.getRelationName())){
             if(insertQuery.getInsertValues().length ==JSQL.gettableColumnLabels(insertQuery.getRelationName()).size()) {
                 TreeMap<String, String> insertMap = new TreeMap<String, String>();
                 ArrayList<String> columnTypes = new ArrayList<String>();
@@ -58,6 +59,10 @@ public class SQLDatabase {
                 return true;
             }else {
                 System.out.println("User did not input enough fields");
+                return false;
+            }
+            }else {
+                System.out.println("table " + insertQuery.getRelationName() + " does not exist!");
                 return false;
             }
             }else{
@@ -77,9 +82,9 @@ public class SQLDatabase {
         JSQL.printTable(preTable2);
         System.out.println("Preparing to receive input, exit Token is \"*\"");
         while(true){
-            Query inputs = Query.readQuery("*", true);
+            Query inputs = Query.readQuery("exit", true);
             if (inputs == null) {
-                System.out.println("");
+                System.out.println("Exiting SQL Terminal...");
                 break;
             }
             if (inputs.isSelect()) {
