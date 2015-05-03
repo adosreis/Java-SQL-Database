@@ -69,6 +69,46 @@ public class SQLDatabase {
                 return false;
             }
         }
+    public static boolean delete(Query deleteQuery, String waste){
+        if(deleteQuery.isDelete()){
+            if(JSQL.getTables().contains(deleteQuery.getRelationName())){
+                if(deleteQuery.getWhereID() != -1){
+                    JSQL.delete(deleteQuery.getRelationName(), deleteQuery.getWhereID());
+                    return true;
+                } else {
+                    JSQL.delete(deleteQuery.getRelationName());
+                    return true;
+                }
+                }else{
+                return false;
+            }
+            }else{
+                return false;
+            }
+    }
+    public static boolean update(Query updateQuery, String waste){
+        if(updateQuery.isUpdate()){
+            if(JSQL.getTables().contains(updateQuery.getRelationName())){
+                    if (JSQL.gettableColumnLabels(updateQuery.getRelationName()).contains(updateQuery.getUpdateField())){
+                        if (updateQuery.getWhereID() == -1){
+                            for(Integer i :JSQL.getIDArray(updateQuery.getRelationName())){
+                                JSQL.update(updateQuery.getRelationName(), i, updateQuery.getUpdateField(), updateQuery.getUpdateValue());
+                            }
+                            return true;
+                        }else {
+                            JSQL.update(updateQuery.getRelationName(), updateQuery.getWhereID(), updateQuery.getUpdateField(), updateQuery.getUpdateValue());
+                            return true;
+                        }
+                    }else {
+                        return false;
+                    }
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
         TreeMap<String,String> preTable1 = new TreeMap<String, String>();
@@ -94,7 +134,12 @@ public class SQLDatabase {
                 select(inputs, "");
             } else if (inputs.isInsert()) {
                 insert(inputs, "");
-            } else {
+            } else if (inputs.isDelete()){
+                delete(inputs,"");
+            } else if (inputs.isUpdate()){
+                update(inputs,"");
+            }
+            else {
                 System.out.println("not yet implemented or incorrect input!");
             }
 

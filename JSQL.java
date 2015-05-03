@@ -79,7 +79,12 @@ public class JSQL {
 
     public static void delete(String tableName, Integer ID) {
         if (table.get(tableName).size() > ID - 1) {
-            table.get(tableName).set(ID - 1, null);
+           deleteValues(tableName,ID);
+        }
+    }
+    public static void delete(String tableName){
+        for (int i = 0; i < table.get(tableName).size(); i++){
+            deleteValues(tableName,i);
         }
     }
 
@@ -89,14 +94,24 @@ public class JSQL {
                 table.get(tableName).get(ID - 1).put(column, value);
         }
     }
-
-    public static Set<String> gettableColumnLabels(String tableName) {
-        return table.get(tableName).get(0).keySet();
+    private static void deleteValues(String tableName, Integer ID){
+        for (String s : table.get(tableName).get(ID).keySet()){
+            table.get(tableName).get(ID).put(s,null);
+        }
     }
 
-    public static void main(String[] args) {
+    public static Set<String> gettableColumnLabels(String tableName) {return table.get(tableName).get(0).keySet();}
 
+    public static ArrayList<Integer> getIDArray(String tableName){
+        ArrayList<TreeMap<String,String>> t = table.get(tableName);
+        ArrayList<Integer> returnInts = new ArrayList<Integer>();
+        for(int i = 0; i < t.size(); i++){
+            if(!(t.get(i).equals(null))){
+                returnInts.add(i+1);
+            }
+        }return returnInts;
     }
+
     public static Set<String> getTables(){return table.keySet();}
 
     public static void createTable(String tableName, ArrayList<TreeMap<String, String>> table) {
@@ -108,17 +123,21 @@ public class JSQL {
 
     public static void printTable(Integer ID, SortedMap<String, String> table) {
         if(table != null) {
-            System.out.println();
-            System.out.print("| ID ");
-            for (String s : table.keySet()) {
-                System.out.print("| " + s);
+            if(table.keySet() !=null) {
+                System.out.println();
+                System.out.print("| ID ");
+                for (String s : table.keySet()) {
+                    System.out.print("| " + s);
+                }
+                System.out.println("|");
+                System.out.print("| " + ID + " ");
+                for (String s : table.values()) {
+                    System.out.print("| " + s + " ");
+                }
+                System.out.println(" |");
+            }else{
+                System.out.println("ID not contained in table");
             }
-            System.out.println("|");
-            System.out.print("| " + ID + " ");
-            for (String s : table.values()) {
-                System.out.print("| " + s + " ");
-            }
-            System.out.println(" |");
         }else{
             System.out.println("ID not contained in table");
         }
@@ -134,19 +153,25 @@ public class JSQL {
             System.out.println(" |");
             System.out.println("--------------------------------------------------------------");
             for (int i = 1; i <= table.size(); i++) {
+                boolean firstVal = true;
                 System.out.print("| " + i + " ");
-                if(table.get(i-1) != null){
                 for (String s : table.get(i - 1).values()) {
+                    if(s != null){
                     System.out.print(" | " + s);
+                    }else if(firstVal){
+                        System.out.print(" |       ");
+                        firstVal = false;
+                    }else{
+                        System.out.print("          ");
+                    }
+
                 }
                 System.out.println(" |");
                     System.out.println("--------------------------------------------------------------");
-            }else{
-                    System.out.print("null");
-                }
+
             }
         }else{
-            System.out.println("null table returned");
+            System.out.println("table not valid");
         }
     }
 }
