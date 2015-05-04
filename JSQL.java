@@ -83,7 +83,7 @@ public class JSQL {
         }
     }
     public static void delete(String tableName){
-        for (int i = 0; i < table.get(tableName).size(); i++){
+        for (int i = 1; i <= table.get(tableName).size(); i++){
             deleteValues(tableName,i);
         }
     }
@@ -95,8 +95,8 @@ public class JSQL {
         }
     }
     private static void deleteValues(String tableName, Integer ID){
-        for (String s : table.get(tableName).get(ID).keySet()){
-            table.get(tableName).get(ID).put(s,null);
+        for (String s : table.get(tableName).get(ID-1).keySet()){
+            table.get(tableName).get(ID-1).put(s,null);
         }
     }
 
