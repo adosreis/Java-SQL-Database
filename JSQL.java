@@ -95,8 +95,8 @@ public class JSQL {
         }
     }
     private static void deleteValues(String tableName, Integer ID){
-        for (String s : table.get(tableName).get(ID).keySet()){
-            table.get(tableName).get(ID).put(s,null);
+        for (String s : table.get(tableName).get(ID-1).keySet()){
+            table.get(tableName).get(ID-1).put(s,null);
         }
     }
 
