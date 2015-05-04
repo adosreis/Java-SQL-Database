@@ -11,10 +11,10 @@ public class SQLDatabase {
     public static boolean select (Query selectQuery,String waste) {
         if(selectQuery.isSelect()){
             ArrayList<String> fields = new ArrayList<String>(Arrays.asList(selectQuery.getSelectFields()));
-            if(selectQuery.getWhereID() ==0){
+            /*if(selectQuery.getWhereID() == 0){
                 return false;
-            }
-            else if(selectQuery.getWhereID() != -1){
+            }*/
+            if(selectQuery.getWhereID() != -1){
                 if (fields.contains("*")){
                     JSQL.printTable(selectQuery.getWhereID(),JSQL.select(selectQuery.getRelationName(), selectQuery.getWhereID()));
                     return true;
@@ -26,7 +26,7 @@ public class SQLDatabase {
                 else{
                     return false;
                 }
-            }else if(JSQL.getIDArray(selectQuery.getRelationName()).contains(selectQuery.getWhereID())){
+            }else if(JSQL.getIDArray(selectQuery.getRelationName()).size() > selectQuery.getWhereID()){
                 if(fields.contains("*")){
                     JSQL.printTable(JSQL.select(selectQuery.getRelationName()));
                     return true;
@@ -98,7 +98,10 @@ public class SQLDatabase {
         if(updateQuery.isUpdate()){
             if(JSQL.getTables().contains(updateQuery.getRelationName())){
                     if (JSQL.gettableColumnLabels(updateQuery.getRelationName()).contains(updateQuery.getUpdateField())){
-                        if (updateQuery.getWhereID() == -1){
+                        if(updateQuery.getWhereID() ==0){
+                            return false;
+                        }
+                        else if (updateQuery.getWhereID() == -1){
                             for(Integer i :JSQL.getIDArray(updateQuery.getRelationName())){
                                 JSQL.update(updateQuery.getRelationName(), i, updateQuery.getUpdateField(), updateQuery.getUpdateValue());
                             }
