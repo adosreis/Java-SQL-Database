@@ -11,12 +11,14 @@ public class SQLDatabase {
     public static boolean select (Query selectQuery,String waste) {
         if(selectQuery.isSelect()){
             ArrayList<String> fields = new ArrayList<String>(Arrays.asList(selectQuery.getSelectFields()));
-            if(selectQuery.getWhereID() != -1){
+            if(selectQuery.getWhereID() ==0){
+                return false;
+            }
+            else if(selectQuery.getWhereID() != -1){
                 if (fields.contains("*")){
                     JSQL.printTable(selectQuery.getWhereID(),JSQL.select(selectQuery.getRelationName(), selectQuery.getWhereID()));
                     return true;
                 }
-
                 else if(selectQuery.getSelectFields() != null && !fields.contains("*")){
                     JSQL.printTable(selectQuery.getWhereID(), JSQL.select(selectQuery.getRelationName(), selectQuery.getWhereID(), selectQuery.getSelectFields()));
                     return true;
@@ -24,7 +26,7 @@ public class SQLDatabase {
                 else{
                     return false;
                 }
-            }else{
+            }else if(JSQL.getIDArray(selectQuery.getRelationName()).contains(selectQuery.getWhereID())){
                 if(fields.contains("*")){
                     JSQL.printTable(JSQL.select(selectQuery.getRelationName()));
                     return true;
@@ -36,6 +38,9 @@ public class SQLDatabase {
                 else{
                     return false;
                 }
+            }
+            else{
+                return false;
             }
         }else{
             return false;
@@ -58,7 +63,7 @@ public class SQLDatabase {
                 JSQL.insert(insertQuery.getRelationName(), insertMap);
                 return true;
             }else {
-                System.out.println("User did not input enough fields");
+                System.out.println("User did not input correct number of fields");
                 return false;
             }
             }else {
@@ -72,7 +77,10 @@ public class SQLDatabase {
     public static boolean delete(Query deleteQuery, String waste){
         if(deleteQuery.isDelete()){
             if(JSQL.getTables().contains(deleteQuery.getRelationName())){
-                if(deleteQuery.getWhereID() != -1){
+                if(deleteQuery.getWhereID() == 0){
+                    return false;
+                }
+                else if(deleteQuery.getWhereID() != -1){
                     JSQL.delete(deleteQuery.getRelationName(), deleteQuery.getWhereID());
                     return true;
                 } else {
