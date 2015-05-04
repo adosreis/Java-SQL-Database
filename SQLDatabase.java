@@ -131,9 +131,9 @@ public class SQLDatabase {
                 break;
             }
             if (inputs.isSelect()) {
-                select(inputs, "");
+                select(inputs,"");
             } else if (inputs.isInsert()) {
-                insert(inputs, "");
+                insert(inputs,"");
             } else if (inputs.isDelete()){
                 delete(inputs,"");
             } else if (inputs.isUpdate()){
