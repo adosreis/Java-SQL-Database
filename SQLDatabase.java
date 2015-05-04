@@ -11,27 +11,37 @@ public class SQLDatabase {
     public static boolean select (Query selectQuery,String waste) {
         if(selectQuery.isSelect()){
             ArrayList<String> fields = new ArrayList<String>(Arrays.asList(selectQuery.getSelectFields()));
-            /*if(selectQuery.getWhereID() == 0){
+            if(selectQuery.getWhereID() == 0){
                 return false;
-            }*/
-            if(selectQuery.getWhereID() != -1){
+            }
+            if(selectQuery.getWhereID() != -1 && JSQL.getIDArray(selectQuery.getRelationName()).contains(selectQuery.getWhereID())){
                 if (fields.contains("*")){
                     JSQL.printTable(selectQuery.getWhereID(),JSQL.select(selectQuery.getRelationName(), selectQuery.getWhereID()));
                     return true;
                 }
-                else if(selectQuery.getSelectFields() != null && !fields.contains("*")){
+                boolean contained = true;
+                for (String s :selectQuery.getSelectFields()) {
+                    if(!(JSQL.gettableColumnLabels(selectQuery.getRelationName()).contains(s)))
+                        contained = false;
+                }
+                if(selectQuery.getSelectFields() != null && !fields.contains("*") && contained){
                     JSQL.printTable(selectQuery.getWhereID(), JSQL.select(selectQuery.getRelationName(), selectQuery.getWhereID(), selectQuery.getSelectFields()));
                     return true;
                 }
                 else{
                     return false;
                 }
-            }else if(JSQL.getIDArray(selectQuery.getRelationName()).size() > selectQuery.getWhereID()){
+            }else if(selectQuery.getWhereID() == -1){
                 if(fields.contains("*")){
                     JSQL.printTable(JSQL.select(selectQuery.getRelationName()));
                     return true;
                 }
-                else if(selectQuery.getSelectFields() != null && !fields.contains("*")) {
+                boolean contained = true;
+                for (String s :selectQuery.getSelectFields()) {
+                    if(!(JSQL.gettableColumnLabels(selectQuery.getRelationName()).contains(s)))
+                        contained = false;
+                }
+                if(selectQuery.getSelectFields() != null && !fields.contains("*") && contained) {
                     JSQL.printTable(JSQL.select(selectQuery.getRelationName(), selectQuery.getSelectFields()));
                     return true;
                 }
